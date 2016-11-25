@@ -80,7 +80,7 @@ class Main extends PluginBase implements Listener
   {
     if ($this->logFile !== null) {
       $time = gmdate('Y-m-d h:i:s \G\M\T');
-      $msg = "$time [$state] " . $player->getDisplayName() . '(' . $player->getAddress() . ') : ' . $massage . PHP_EOL;
+      $msg = "$time [$state] " . $player->getName() . '(' . $player->getAddress() . ') : ' . $massage . PHP_EOL;
       fwrite($this->logFile, "$msg");
     }
   }

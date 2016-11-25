@@ -2,6 +2,7 @@
 /** Created By Thunder33345 **/
 namespace Thunder33345\CommandBlocker;
 
+use pocketmine\command\RemoteConsoleCommandSender;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\server\RemoteServerCommandEvent;
@@ -19,7 +20,7 @@ class EventListener extends PluginBase implements Listener
 
   public function onPlayerCommand(PlayerCommandPreprocessEvent $event)
   {
-    $playername = $event->getPlayer()->getDisplayName();
+    $name = $event->getPlayer()->getDisplayName();
     $playerIP = $event->getPlayer()->getAddress();
     $message = $event->getMessage();
     $words = explode(" ", $message);
@@ -30,11 +31,11 @@ class EventListener extends PluginBase implements Listener
     if ($this->getOwner->isBlocked($cmd)) {
       if ($this->getOwner->isWhiteListed($event->getPlayer())) {
         $this->getOwner->logFile($event->getPlayer(), 'Notice', "/$cmd " . implode(" ", $words));
-        $this->log()->info("[Allowed] $playername($playerIP) try to execute " . "/$cmd " . implode(" ", $words));
+        $this->log()->info("[Allowed] $name($playerIP) try to execute " . "/$cmd " . implode(" ", $words));
       } else {
         $event->setCancelled(true);
         $this->getOwner->logFile($event->getPlayer(), 'Alert', "/$cmd " . implode(" ", $words));
-        $this->log()->alert("[Blocked] $playername($playerIP) try to execute " . "/$cmd " . implode(" ", $words));
+        $this->log()->alert("[Blocked] $name($playerIP) try to execute " . "/$cmd " . implode(" ", $words));
       }
     }
   }
@@ -57,7 +58,7 @@ class EventListener extends PluginBase implements Listener
       } else {
         $event->setCancelled(true);
         $this->getOwner->logCFile('CONSOLE', 'Alert', "/$cmd $words");
-        $this->Log()->alert("[Blocked] CONSOLE try to execute " . "/$cmd $words");
+        $this->log()->alert("[Blocked] CONSOLE try to execute " . "/$cmd $words");
       }
     }
   }
@@ -75,7 +76,7 @@ class EventListener extends PluginBase implements Listener
       } else {
         $event->setCancelled(true);
         $this->getOwner->logCFile('REMOTE', 'Alert', "/$cmd $words");
-        $this->Log()->alert("[Blocked] REMOTE try to execute " . "/$cmd $words");
+        $this->log()->alert("[Blocked] REMOTE try to execute " . "/$cmd $words");
       }
     }
   }
