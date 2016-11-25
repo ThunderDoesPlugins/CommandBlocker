@@ -81,7 +81,7 @@ class Main extends PluginBase implements Listener
     if (is_resource($handler)) {
       $msg = gmdate('Y-m-d h:i:s \G\M\T') . " [$state] {$sender->getName()} ";
       if ($sender instanceof Player) $msg .= "({$sender->getAddress()}) ";
-      $msg .= $massage;
+      $msg .= ": ".$massage;
       fwrite($handler, $msg);
     } elseif (!is_resource($handler) AND $this->logToFile === true) {
       $this->getLogger()->error("Fail to write to log!");

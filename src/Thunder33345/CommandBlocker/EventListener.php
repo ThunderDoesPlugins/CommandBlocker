@@ -2,7 +2,6 @@
 /** Created By Thunder33345 **/
 namespace Thunder33345\CommandBlocker;
 
-use pocketmine\command\RemoteConsoleCommandSender;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerCommandPreprocessEvent;
 use pocketmine\event\server\RemoteServerCommandEvent;
@@ -29,14 +28,12 @@ class EventListener extends PluginBase implements Listener
       return;
     }
     if ($this->getOwner->isBlocked($cmd)) {
-      if ($this->getOwner->isWhiteListed($event->getPlayer())) {
-        $this->getOwner->logToFile($event->getPlayer(), 'Notice', "/$cmd " . implode(" ", $words));
-        $this->log()->info("[Allowed] $name($playerIP) try to execute " . "/$cmd " . implode(" ", $words));
-      } else {
+      if ($this->getOwner->isWhiteListed($event->getPlayer())) $state = "Allowed"; else {
+        $state = "Blocked";
         $event->setCancelled(true);
-        $this->getOwner->logToFile($event->getPlayer(), 'Alert', "/$cmd " . implode(" ", $words));
-        $this->log()->alert("[Blocked] $name($playerIP) try to execute " . "/$cmd " . implode(" ", $words));
       }
+      $this->getOwner->logToFile($event->getPlayer(), $state, "/$cmd " . implode(" ", $words));
+      $this->log()->info("[$state] $name($playerIP) : /$cmd " . implode(" ", $words));
     }
   }
 
@@ -52,14 +49,12 @@ class EventListener extends PluginBase implements Listener
     $cmd = array_shift($words);
     $words = implode(" ", $words);
     if ($this->getOwner->isBlocked($cmd)) {
-      if (!$this->getOwner->blockConsole) {
-        $this->getOwner->logToFile($event->getSender(), 'Notice', "/$cmd $words");
-        $this->log()->info("[Allowed] CONSOLE try to execute " . "/$cmd $words");
-      } else {
+      if (!$this->getOwner->blockConsole) $state = "Allowed"; else {
         $event->setCancelled(true);
-        $this->getOwner->logToFile($event->getSender(), 'Alert', "/$cmd $words");
-        $this->log()->alert("[Blocked] CONSOLE try to execute " . "/$cmd $words");
+        $state = "Blocked";
       }
+      $this->getOwner->logToFile($event->getSender(), $state, "/$cmd " . implode(" ", $words));
+      $this->log()->info("[$state] {$event->getSender()->getName()} : /$cmd " . implode(" ", $words));
     }
   }
 
@@ -70,14 +65,12 @@ class EventListener extends PluginBase implements Listener
     $cmd = array_shift($words);
     $words = implode(" ", $words);
     if ($this->getOwner->isBlocked($cmd)) {
-      if (!$this->getOwner->blockConsole) {
-        $this->getOwner->logToFile($event->getSender(), 'Notice', "/$cmd $words");
-        $this->log()->info("[Allowed] REMOTE try to execute " . "/$cmd $words");
-      } else {
+      if (!$this->getOwner->blockRemote) $state = "Allowed"; else {
         $event->setCancelled(true);
-        $this->getOwner->logToFile($event->getSender(), 'Alert', "/$cmd $words");
-        $this->log()->alert("[Blocked] REMOTE try to execute " . "/$cmd $words");
+        $state = "Blocked";
       }
+      $this->getOwner->logToFile($event->getSender(), $state, "/$cmd " . implode(" ", $words));
+      $this->log()->info("[$state] {$event->getSender()->getName()} : /$cmd " . implode(" ", $words));
     }
   }
 }

@@ -1,6 +1,10 @@
 ---
 # Command Blocker By Thunder33345
 
+# Command trigger defines weather the command should be counted as a command or chat massage
+# change this to ./ for compatibility  
+cmd-trigger: "/"
+
 # Log to file: logs when someone executed a blocked command
 log-to-file: "true"
 # How to read Log files
