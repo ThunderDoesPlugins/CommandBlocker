@@ -24,16 +24,16 @@ class EventListener extends PluginBase implements Listener
     $message = $event->getMessage();
     $words = explode(" ", $message);
     $cmd = strtolower(substr(array_shift($words), 1));
-    if ($message[0] !== '/') {
-      return;
-    }
+    if ($message[0] !== '/') return;
     if ($this->getOwner->isBlocked($cmd)) {
       if ($this->getOwner->isWhiteListed($event->getPlayer())) $state = "Allowed"; else {
         $state = "Blocked";
         $event->setCancelled(true);
       }
-      $this->getOwner->logToFile($event->getPlayer(), $state, "/$cmd " . implode(" ", $words));
-      $this->log()->info("[$state] $name($playerIP) : /$cmd " . implode(" ", $words));
+      $msg = "/$cmd " . implode(" ", $words);
+      $this->getOwner->alertPlayers($event->getPlayer(), $state, $msg);
+      $this->getOwner->logToFile($event->getPlayer(), $state, $msg);
+      $this->log()->info("[$state] $name($playerIP) : " . $msg);
     }
   }
 
@@ -53,8 +53,10 @@ class EventListener extends PluginBase implements Listener
         $event->setCancelled(true);
         $state = "Blocked";
       }
-      $this->getOwner->logToFile($event->getSender(), $state, "/$cmd " . implode(" ", $words));
-      $this->log()->info("[$state] {$event->getSender()->getName()} : /$cmd " . implode(" ", $words));
+      $msg = "/$cmd " . implode(" ", $words);
+      $this->getOwner->alertPlayers($event->getSender(), $state, $msg);
+      $this->getOwner->logToFile($event->getSender(), $state, $msg);
+      $this->log()->info("[$state] {$event->getSender()->getName()} : " . $msg);
     }
   }
 
@@ -69,8 +71,10 @@ class EventListener extends PluginBase implements Listener
         $event->setCancelled(true);
         $state = "Blocked";
       }
-      $this->getOwner->logToFile($event->getSender(), $state, "/$cmd " . implode(" ", $words));
-      $this->log()->info("[$state] {$event->getSender()->getName()} : /$cmd " . implode(" ", $words));
+      $msg = "/$cmd " . implode(" ", $words);
+      $this->getOwner->alertPlayers($event->getSender(), $state, $msg);
+      $this->getOwner->logToFile($event->getSender(), $state, $msg);
+      $this->log()->info("[$state] {$event->getSender()->getName()} : " . $msg);
     }
   }
 }

@@ -2,7 +2,7 @@
 # Command Blocker By Thunder33345
 
 # Command trigger defines weather the command should be counted as a command or chat massage
-# change this to ./ for compatibility  
+# change this to ./ for compatibility
 cmd-trigger: "/"
 
 # Log to file: logs when someone executed a blocked command
@@ -27,12 +27,12 @@ blocked-command: "op,deop,setuperm,setgperm,unsetuperm,unsetgperm,setugroup"
 # blocked-command: cmd1,cmd2,cmd3,cmd4,cmd5
 
 # Player that are allowed to execute the blocked commands
-whitelisted-player: "_,__"
+whitelisted-players: "_,__"
 # Format
 # whitelisted-player: owner,admin,trustedhelper
 # Side Note: this WONT give them the permission to execute the command it will just expent them form this plugin's check
 
-# Players that will be alerted if then lre online
-alerted-players: ""
+# Players that will be alerted if they are online
+alerted-players: "_,__"
 
 ...
