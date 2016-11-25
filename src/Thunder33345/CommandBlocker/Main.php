@@ -25,10 +25,9 @@ class Main extends PluginBase implements Listener
     $this->logToFile = $this->getConfig()->get("log-to-file");
     $this->alertedPlayers = explode(",", $this->getConfig()->get("alerted-players"));
 
-    if ($this->logToFile === true) {
-      if (!file_exists($this->getDataFolder() . "logs/"))
-        mkdir($this->getDataFolder() . "logs/", 0777, true);
-
+    if ($this->logToFile == true) {
+      //if (!file_exists($this->getDataFolder() . "logs/"))
+      @mkdir($this->getDataFolder() . "logs/", 0777, true);
     }
 
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
@@ -77,11 +76,13 @@ class Main extends PluginBase implements Listener
   public function logToFile(CommandSender $sender, $state, $massage)
   {
     if ($this->logToFile == false) return;
-    $handler = fopen($this->getDataFolder() . "logs/CommandLogs_" . date("Y-m-d") . ".log", "a");
+    $name = $this->getDataFolder() . "logs/CommandLogs_" . date("Y-m-d") . ".log";
+    if (!file_exists($name)) touch($name);
+    $handler = fopen($name, "a");
     if (is_resource($handler)) {
       $msg = gmdate('Y-m-d h:i:s \G\M\T') . " [$state] {$sender->getName()} ";
       if ($sender instanceof Player) $msg .= "({$sender->getAddress()}) ";
-      $msg .= ": " . $massage;
+      $msg .= ": " . $massage.PHP_EOL;
       fwrite($handler, $msg);
       fclose($handler);
     } elseif (!is_resource($handler) AND $this->logToFile === true) {

@@ -53,7 +53,7 @@ class EventListener extends PluginBase implements Listener
         $event->setCancelled(true);
         $state = "Blocked";
       }
-      $msg = "/$cmd " . implode(" ", $words);
+      $msg = "/$cmd $words";// . implode(" ", $words);
       $this->getOwner->alertPlayers($event->getSender(), $state, $msg);
       $this->getOwner->logToFile($event->getSender(), $state, $msg);
       $this->log()->info("[$state] {$event->getSender()->getName()} : " . $msg);
