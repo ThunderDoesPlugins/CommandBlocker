@@ -10,4 +10,4 @@
  - Alert Specified Users
 
 ####See full detail on the config file
-####Tested on Genisys 1.1dev "Ikaros"  API 2.0.0 for Minecraft: Pocket Edition v0.14.x alpha (protocol version 70)
+#####NOTE Config are not backward compatible please update it
