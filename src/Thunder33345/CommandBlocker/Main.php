@@ -44,10 +44,7 @@ class Main extends PluginBase implements Listener
     if (isset($this->blockedCommands)) {
       $cmd = strtolower($cmd);
       foreach ($this->blockedCommands as $bcmd) {
-        $bcmd = strtolower($bcmd);
-        if ($cmd === $bcmd) {
-          return true;
-        }
+        if ($cmd === strtolower($bcmd)) return true;
       }
     }
 
@@ -60,10 +57,7 @@ class Main extends PluginBase implements Listener
       $p = $p->getName();
       $p = strtolower($p);
       foreach ($this->whiteListedPlayer as $wlp) {
-        $wlp = strtolower($wlp);
-        if ($p === $wlp) {
-          return true;
-        }
+        if ($p === strtolower($wlp)) return true;
       }
     }
 
@@ -89,6 +83,7 @@ class Main extends PluginBase implements Listener
       if ($sender instanceof Player) $msg .= "({$sender->getAddress()}) ";
       $msg .= ": " . $massage;
       fwrite($handler, $msg);
+      fclose($handler);
     } elseif (!is_resource($handler) AND $this->logToFile === true) {
       $this->getLogger()->error("Fail to write to log!");
     }
