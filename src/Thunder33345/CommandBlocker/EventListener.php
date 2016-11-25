@@ -10,11 +10,12 @@ use pocketmine\plugin\PluginBase;
 
 class EventListener extends PluginBase implements Listener
 {
-  private $getOwner;
+  private $getOwner,$cmdTrigger;
 
   public function __construct(Main $plugin)
   {
     $this->getOwner = $plugin;
+    $this->cmdTrigger = $plugin->getConfig()->get('cmd-trigger');
   }
 
   public function onPlayerCommand(PlayerCommandPreprocessEvent $event)
@@ -24,7 +25,7 @@ class EventListener extends PluginBase implements Listener
     $message = $event->getMessage();
     $words = explode(" ", $message);
     $cmd = strtolower(substr(array_shift($words), 1));
-    if ($message[0] !== '/') return;
+    if ($message[0] !== $this->cmdTrigger) return;
     if ($this->getOwner->isBlocked($cmd)) {
       if ($this->getOwner->isWhiteListed($event->getPlayer())) $state = "Allowed"; else {
         $state = "Blocked";
