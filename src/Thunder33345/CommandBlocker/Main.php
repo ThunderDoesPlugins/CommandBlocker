@@ -4,6 +4,7 @@
  **/
 namespace Thunder33345\CommandBlocker;
 
+use pocketmine\command\CommandSender;
 use pocketmine\event\Listener;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
@@ -13,10 +14,10 @@ class Main extends PluginBase implements Listener
   public
     $blockConsole = true,
     $blockRemote = true;
-  protected
+  private
     $whiteListedPlayer = [],
     $blockedCommands = [],
-    $logFile = null;
+    $logToFile = true;
 
   public function onEnable()
   {
@@ -26,23 +27,20 @@ class Main extends PluginBase implements Listener
     $this->blockRemote = $this->getConfig()->get("block-remote");
     $this->blockedCommands = explode(",", $this->getConfig()->get("blocked-command"));
     $this->whiteListedPlayer = explode(",", $this->getConfig()->get("whitelisted-player"));
-    $loggerEnabled = $this->getConfig()->get("log-to-file");
-    if ($loggerEnabled === true) {
-      if (!file_exists($this->getDataFolder() . "logs/")) {
+    $this->logToFile = $this->getConfig()->get("log-to-file");
+
+    if ($this->logToFile === true) {
+      if (!file_exists($this->getDataFolder() . "logs/"))
         mkdir($this->getDataFolder() . "logs/", 0777, true);
-      }
-      $logfilename = $this->getDataFolder() . "logs/Logs_" . date("Y-m-d") . ".log";
-      $this->logFile = fopen($logfilename, "a");
+
     }
+
     $this->getServer()->getPluginManager()->registerEvents($this, $this);
     $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
   }
 
   public function onDisable()
   {
-    if ($this->logFile !== null) {
-      fclose($this->logFile);
-    }
   }
 
   public function isBlocked($cmd)
@@ -76,21 +74,17 @@ class Main extends PluginBase implements Listener
     return false;
   }
 
-  public function logFile(Player $player, $state, $massage)
+  public function logToFile(CommandSender $sender, $state, $massage)
   {
-    if ($this->logFile !== null) {
-      $time = gmdate('Y-m-d h:i:s \G\M\T');
-      $msg = "$time [$state] " . $player->getName() . '(' . $player->getAddress() . ') : ' . $massage . PHP_EOL;
-      fwrite($this->logFile, "$msg");
-    }
-  }
-
-  public function logCFile($exe, $state, $massage)
-  {
-    if ($this->logFile !== null) {
-      $time = gmdate('Y-m-d h:i:s \G\M\T');
-      $msg = "$time [$state] " . $exe . ' : ' . $massage . PHP_EOL;
-      fwrite($this->logFile, "$msg");
+    if ($this->logToFile == false) return;
+    $handler = fopen($this->getDataFolder() . "logs/CommandLogs_" . date("Y-m-d") . ".log", "a");
+    if (is_resource($handler)) {
+      $msg = gmdate('Y-m-d h:i:s \G\M\T') . " [$state] {$sender->getName()} ";
+      if ($sender instanceof Player) $msg .= "({$sender->getAddress()}) ";
+      $msg .= $massage;
+      fwrite($handler, $msg);
+    } elseif (!is_resource($handler) AND $this->logToFile === true) {
+      $this->getLogger()->error("Fail to write to log!");
     }
   }
 }

@@ -30,11 +30,11 @@ class EventListener extends PluginBase implements Listener
     }
     if ($this->getOwner->isBlocked($cmd)) {
       if ($this->getOwner->isWhiteListed($event->getPlayer())) {
-        $this->getOwner->logFile($event->getPlayer(), 'Notice', "/$cmd " . implode(" ", $words));
+        $this->getOwner->logToFile($event->getPlayer(), 'Notice', "/$cmd " . implode(" ", $words));
         $this->log()->info("[Allowed] $name($playerIP) try to execute " . "/$cmd " . implode(" ", $words));
       } else {
         $event->setCancelled(true);
-        $this->getOwner->logFile($event->getPlayer(), 'Alert', "/$cmd " . implode(" ", $words));
+        $this->getOwner->logToFile($event->getPlayer(), 'Alert', "/$cmd " . implode(" ", $words));
         $this->log()->alert("[Blocked] $name($playerIP) try to execute " . "/$cmd " . implode(" ", $words));
       }
     }
@@ -53,11 +53,11 @@ class EventListener extends PluginBase implements Listener
     $words = implode(" ", $words);
     if ($this->getOwner->isBlocked($cmd)) {
       if (!$this->getOwner->blockConsole) {
-        $this->getOwner->logCFile('CONSOLE', 'Notice', "/$cmd $words");
+        $this->getOwner->logToFile($event->getSender(), 'Notice', "/$cmd $words");
         $this->log()->info("[Allowed] CONSOLE try to execute " . "/$cmd $words");
       } else {
         $event->setCancelled(true);
-        $this->getOwner->logCFile('CONSOLE', 'Alert', "/$cmd $words");
+        $this->getOwner->logToFile($event->getSender(), 'Alert', "/$cmd $words");
         $this->log()->alert("[Blocked] CONSOLE try to execute " . "/$cmd $words");
       }
     }
@@ -71,11 +71,11 @@ class EventListener extends PluginBase implements Listener
     $words = implode(" ", $words);
     if ($this->getOwner->isBlocked($cmd)) {
       if (!$this->getOwner->blockConsole) {
-        $this->getOwner->logCFile('REMOTE', 'Notice', "/$cmd $words");
+        $this->getOwner->logToFile($event->getSender(), 'Notice', "/$cmd $words");
         $this->log()->info("[Allowed] REMOTE try to execute " . "/$cmd $words");
       } else {
         $event->setCancelled(true);
-        $this->getOwner->logCFile('REMOTE', 'Alert', "/$cmd $words");
+        $this->getOwner->logToFile($event->getSender(), 'Alert', "/$cmd $words");
         $this->log()->alert("[Blocked] REMOTE try to execute " . "/$cmd $words");
       }
     }
