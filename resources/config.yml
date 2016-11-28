@@ -22,7 +22,7 @@ block-console: "true"
 block-remote: "true"
 
 # Blocked Commands here remove the leading /
-blocked-command: "op,deop,setuperm,setgperm,unsetuperm,unsetgperm,setugroup"
+blocked-command: "op,deop,setuperm,setgperm,unsetuperm,unsetgperm,setgroup"
 # Example Format
 # blocked-command: cmd1,cmd2,cmd3,cmd4,cmd5
 
